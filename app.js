@@ -9,6 +9,8 @@ const serviceRoutes = require('./routes/serviceRoutes');
 const toolRoutes = require('./routes/toolRoutes');
 const partRoutes = require('./routes/partRoutes');
 
+const dashboardController = require('./controllers/dashboardController');
+
 // create express app
 const app = express();
 
@@ -26,7 +28,7 @@ const options = { useNewUrlParser: true, useUnifiedTopology: true, useCreateInde
 mongoose.connect(uri, options).then((result) => {
     console.log("Database connected");
     https.createServer(httpsOptions, app).listen(port, () => {
-        console.log(`Server is running on port ${port}`);
+        console.log(`https://localhost:${port}`);
     });
 }).catch((err) => {
     console.log(err);
@@ -46,9 +48,7 @@ app.use(express.urlencoded({ extended: true }));
 app.use(favicon(path.join(__dirname, 'public/images', 'favicon.ico')));
 
 // routes
-app.get('/', (req, res) => {
-    res.render('index', { title: 'Automotive Intelligence | Home' });
-});
+app.get('/', dashboardController.getAllDashboard);
 
 // service routes
 app.use('/services', serviceRoutes);
